@@ -1,23 +1,9 @@
 import type { Metadata } from "next";
-import { Inter, Open_Sans } from "next/font/google";
 import { AppRouterCacheProvider } from "@mui/material-nextjs/v13-appRouter";
-import { ThemeProvider } from "@mui/material";
-import { theme } from "@/lib/theme";
+import { CssBaseline, InitColorSchemeScript, ThemeProvider } from "@mui/material";
+
 import { Sidebar } from "@/components/sidebar";
-
-const openSans = Open_Sans({
-  weight: ["300", "400", "500", "600", "700"],
-  subsets: ["latin"],
-  display: "swap",
-  variable: "--font-open-sans",
-});
-
-const inter = Inter({
-  weight: ["300", "400", "500", "600", "700"],
-  subsets: ["latin"],
-  display: "swap",
-  variable: "--font-inter",
-});
+import { theme } from "@/theme";
 
 export const metadata: Metadata = {
   title: "NextJS MUI Form",
@@ -31,9 +17,11 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${openSans.variable} ${inter.variable}`}>
+      <body>
+        <InitColorSchemeScript />
         <AppRouterCacheProvider>
           <ThemeProvider theme={theme}>
+            <CssBaseline />
             <Sidebar />
             {children}
           </ThemeProvider>
