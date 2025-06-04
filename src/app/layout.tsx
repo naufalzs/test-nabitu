@@ -3,6 +3,7 @@ import { Inter, Open_Sans } from "next/font/google";
 import { AppRouterCacheProvider } from "@mui/material-nextjs/v13-appRouter";
 import { ThemeProvider } from "@mui/material";
 import { theme } from "@/lib/theme";
+import { Sidebar } from "@/components/sidebar";
 
 const openSans = Open_Sans({
   weight: ["300", "400", "500", "600", "700"],
@@ -32,7 +33,10 @@ export default function RootLayout({
     <html lang="en">
       <body className={`${openSans.variable} ${inter.variable}`}>
         <AppRouterCacheProvider>
-          <ThemeProvider theme={theme}>{children}</ThemeProvider>
+          <ThemeProvider theme={theme}>
+            <Sidebar />
+            {children}
+          </ThemeProvider>
         </AppRouterCacheProvider>
       </body>
     </html>
