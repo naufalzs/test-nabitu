@@ -1,8 +1,9 @@
-import { CssBaseline, InitColorSchemeScript, ThemeProvider } from "@mui/material";
+import { Box, CssBaseline, InitColorSchemeScript, ThemeProvider } from "@mui/material";
 import { AppRouterCacheProvider } from "@mui/material-nextjs/v13-appRouter";
 import type { Metadata } from "next";
 
 import { Sidebar } from "@/components/sidebar";
+import { Topbar } from "@/components/topbar";
 import { theme } from "@/theme";
 
 export const metadata: Metadata = {
@@ -22,8 +23,13 @@ export default function RootLayout({
         <AppRouterCacheProvider>
           <ThemeProvider theme={theme}>
             <CssBaseline />
-            <Sidebar />
-            {children}
+            <Box sx={{ display: "flex" }}>
+              <Sidebar />
+              <Box component={"main"} sx={{ flexGrow: 1, bgcolor: "primary.main" }}>
+                <Topbar />
+                {children}
+              </Box>
+            </Box>
           </ThemeProvider>
         </AppRouterCacheProvider>
       </body>
