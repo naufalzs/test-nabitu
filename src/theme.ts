@@ -30,7 +30,7 @@ export const theme = createTheme({
     },
     blue: {
       50: "#F1F5F9",
-      300: "E2E8F0",
+      300: "#E2E8F0",
       500: "#637381",
       700: "#64748B",
     },
@@ -61,4 +61,9 @@ export const theme = createTheme({
       letterSpacing: 0.1,
     },
   },
+  // components: {
+  //   MuiFab: {
+  //     variants: ""
+  //   }
+  // }
 });
