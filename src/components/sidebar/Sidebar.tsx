@@ -34,7 +34,7 @@ export default function Sidebar() {
           py: 7,
         }}
       >
-        <Image src={"icon.svg"} width={166} height={45} alt="App Icon" />
+        <Image src={"/icon.svg"} width={166} height={45} alt="App Icon" />
       </Toolbar>
       <Typography variant="subtitle2" sx={{ textTransform: "uppercase", px: 10, pt: 5, fontWeight: "600" }}>
         Menu
