@@ -36,7 +36,7 @@ export default function Sidebar() {
       >
         <Image src={"icon.svg"} width={166} height={45} alt="App Icon" />
       </Toolbar>
-      <Typography variant="body2" sx={{ textTransform: "uppercase", px: 10, pt: 5, fontWeight: "600" }}>
+      <Typography variant="subtitle2" sx={{ textTransform: "uppercase", px: 10, pt: 5, fontWeight: "600" }}>
         Menu
       </Typography>
       <List sx={{ px: 6 }}>
@@ -44,7 +44,14 @@ export default function Sidebar() {
           <ListItem key={index} disablePadding>
             <ListItemButton sx={{ py: 4 }}>
               <ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon>
-              <ListItemText primary={item.name} sx={{ fontWeight: "600" }} />
+              <ListItemText
+                primary={item.name}
+                slotProps={{
+                  primary: {
+                    variant: "subtitle1",
+                  },
+                }}
+              />
             </ListItemButton>
           </ListItem>
         ))}

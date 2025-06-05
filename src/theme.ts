@@ -44,5 +44,21 @@ export const theme = createTheme({
     inter: {
       fontFamily: inter.style.fontFamily,
     },
+    subtitle1: {
+      fontWeight: 600,
+    },
+    subtitle2: {
+      fontWeight: 600,
+    },
+    subtitle3: {
+      fontSize: 12,
+      fontWeight: 600,
+      letterSpacing: 0.1,
+    },
+    body3: {
+      fontSize: 12,
+      fontWeight: 400,
+      letterSpacing: 0.1,
+    },
   },
 });
