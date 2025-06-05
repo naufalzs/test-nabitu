@@ -1,6 +1,6 @@
-import type { Metadata } from "next";
-import { AppRouterCacheProvider } from "@mui/material-nextjs/v13-appRouter";
 import { CssBaseline, InitColorSchemeScript, ThemeProvider } from "@mui/material";
+import { AppRouterCacheProvider } from "@mui/material-nextjs/v13-appRouter";
+import type { Metadata } from "next";
 
 import { Sidebar } from "@/components/sidebar";
 import { theme } from "@/theme";

@@ -1,9 +1,8 @@
-import InboxIcon from "@mui/icons-material/MoveToInbox";
-import MailIcon from "@mui/icons-material/Mail";
-import { Box, Divider, Drawer, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Toolbar, Typography } from "@mui/material";
-import React from "react";
-import Image from "next/image";
 import { NAV_ITEMS } from "@/constants/navList";
+import MailIcon from "@mui/icons-material/Mail";
+import InboxIcon from "@mui/icons-material/MoveToInbox";
+import { Drawer, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Toolbar, Typography } from "@mui/material";
+import Image from "next/image";
 
 const drawerWidth = 280;
 

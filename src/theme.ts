@@ -1,7 +1,7 @@
 "use client";
 
-import { Inter, Open_Sans } from "next/font/google";
 import { createTheme } from "@mui/material";
+import { Inter, Open_Sans } from "next/font/google";
 
 const openSans = Open_Sans({
   weight: ["300", "400", "500", "600", "700"],
