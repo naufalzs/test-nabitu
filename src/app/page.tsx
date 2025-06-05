@@ -1,10 +1,5 @@
-import { Button, Typography } from "@mui/material";
+import { redirect } from "next/navigation";
 
 export default function Home() {
-  return (
-    <div>
-      <Button>class</Button>
-      <Typography>Hiho</Typography>
-    </div>
-  );
+  redirect("/invoices/add");
 }
