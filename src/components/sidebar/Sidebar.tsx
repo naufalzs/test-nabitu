@@ -15,12 +15,12 @@ export default function Sidebar() {
         "& .MuiDrawer-paper": {
           width: drawerWidth,
           boxSizing: "border-box",
-          bgcolor: "#1C2434",
-          color: "#9D9D9D",
+          bgcolor: "text.primary",
+          color: "gray.500",
           // ACTIVE #F4F4F4
           "& .MuiListItemIcon-root": {
             minWidth: 34,
-            color: "#9D9D9D",
+            color: "gray.500",
           },
         },
       }}
