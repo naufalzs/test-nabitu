@@ -38,6 +38,10 @@ export const theme = createTheme({
       200: "#F0F0F0",
       500: "#9D9D9D",
     },
+    green: {
+      300: "#34D399",
+      900: "#004434",
+    },
   },
   typography: {
     fontFamily: openSans.style.fontFamily,
@@ -61,9 +65,33 @@ export const theme = createTheme({
       letterSpacing: 0.1,
     },
   },
-  // components: {
-  //   MuiFab: {
-  //     variants: ""
-  //   }
-  // }
+  components: {
+    MuiPaper: {
+      styleOverrides: {
+        root: {
+          borderRadius: 2,
+        },
+      },
+    },
+    MuiAlert: {
+      styleOverrides: {
+        root: {
+          fontSize: 16,
+        },
+        standardSuccess: {
+          backgroundColor: "#E1F9F0",
+          color: "#637381",
+        },
+      },
+    },
+    MuiAlertTitle: {
+      styleOverrides: {
+        root: {
+          color: "#004434",
+          fontWeight: "700",
+          marginBottom: 8,
+        },
+      },
+    },
+  },
 });

@@ -13,6 +13,9 @@ declare module "@mui/material/styles" {
     gray: {
       [key: string]: string;
     };
+    green: {
+      [key: string]: string;
+    };
   }
 
   interface PaletteOptions {
@@ -20,6 +23,9 @@ declare module "@mui/material/styles" {
       [key: string]: string;
     };
     gray?: {
+      [key: string]: string;
+    };
+    green?: {
       [key: string]: string;
     };
   }
