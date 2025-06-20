@@ -73,6 +73,16 @@ export const theme = createTheme({
         },
       },
     },
+    MuiButton: {
+      styleOverrides: {
+        root: {
+          textTransform: "capitalize",
+          "&.MuiButton-sizeLarge": {
+            padding: "13px 70px",
+          },
+        },
+      },
+    },
     MuiAlert: {
       styleOverrides: {
         root: {
@@ -91,6 +101,35 @@ export const theme = createTheme({
           fontWeight: "700",
           marginBottom: 8,
         },
+      },
+    },
+    MuiOutlinedInput: {
+      styleOverrides: {
+        root: ({ theme }) => ({
+          "& .MuiInputBase-input": {
+            padding: "13px 22px ",
+          },
+          "& .MuiOutlinedInput-notchedOutline": {
+            borderWidth: "1.5px",
+            borderColor: theme.palette.blue[300],
+          },
+          "&.Mui-focused": {
+            "& .MuiOutlinedInput-notchedOutline": {
+              borderColor: theme.palette.blue[500],
+            },
+          },
+          "&:hover": {
+            " .MuiOutlinedInput-notchedOutline": {
+              borderColor: theme.palette.blue[500],
+            },
+          },
+          "& .MuiInputAdornment-root": {
+            backgroundColor: theme.palette.divider,
+            padding: "24px 28px ",
+            borderTopLeftRadius: theme.shape.borderRadius + "px",
+            borderBottomLeftRadius: theme.shape.borderRadius + "px",
+          },
+        }),
       },
     },
   },

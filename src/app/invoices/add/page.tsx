@@ -1,5 +1,8 @@
+import { INVOICE_STATUSES } from "@/constants/invoiceStatus";
+
+import AddIcon from "@mui/icons-material/Add";
 import CheckIcon from "@mui/icons-material/Check";
-import { Alert, AlertTitle, Box, Container, Grid, Input, InputBase, Paper, Typography } from "@mui/material";
+import { Alert, AlertTitle, Box, Button, Container, Grid, InputAdornment, MenuItem, Paper, TextField, Typography } from "@mui/material";
 export default function AddPage() {
   return (
     <Container sx={{ pt: 13 }}>
@@ -26,24 +29,89 @@ export default function AddPage() {
         >
           <Typography variant="subtitle1">Invoice Form</Typography>
         </Box>
-        <Box px={6.5} py={4}>
+        <Box px={6.5} pt={4} pb={9}>
           <Grid container rowSpacing={4.5} columnSpacing={9}>
             <Grid size={7}>
-              <InputBase placeholder="Enter your invoice name" />
+              <Box>
+                <Typography variant="subtitle2" color="textDarker" marginBottom={3}>
+                  Name{" "}
+                  <Typography component={"span"} color="red.600">
+                    *
+                  </Typography>
+                </Typography>
+                <TextField sx={{ width: "100%" }} variant="outlined" placeholder="Enter your invoice name" type="text" />
+              </Box>
             </Grid>
             <Grid size={5}>
-              <Input placeholder="Enter your invoice number" />
+              <Box>
+                <Typography variant="subtitle2" color="textDarker" marginBottom={3}>
+                  Number{" "}
+                  <Typography component={"span"} color="red.600">
+                    *
+                  </Typography>
+                </Typography>
+                <TextField sx={{ width: "100%" }} variant="outlined" placeholder="Enter your invoice number" type="number" />
+              </Box>
             </Grid>
             <Grid size={7}>
-              <Input placeholder="DD/MM/YYYY" />
+              <Box>
+                <Typography variant="subtitle2" color="textDarker" marginBottom={3}>
+                  Due Date{" "}
+                  <Typography component={"span"} color="red.600">
+                    *
+                  </Typography>
+                </Typography>
+                <TextField sx={{ width: "100%" }} variant="outlined" placeholder="DD/MM/YY" type="date" />
+              </Box>
             </Grid>
             <Grid size={5}>
-              <Input placeholder="Enter your invoice amount" />
+              <Box>
+                <Typography variant="subtitle2" color="textDarker" marginBottom={3}>
+                  Amount{" "}
+                  <Typography component={"span"} color="red.600">
+                    *
+                  </Typography>
+                </Typography>
+                <TextField
+                  sx={{ width: "100%", "& .MuiInputBase-root": { pl: 0 } }}
+                  slotProps={{
+                    input: {
+                      startAdornment: (
+                        <InputAdornment position="start" component={"div"}>
+                          <Typography variant="body1">Rp</Typography>
+                        </InputAdornment>
+                      ),
+                    },
+                  }}
+                  variant="outlined"
+                  placeholder="Choose the status"
+                  type="number"
+                />
+              </Box>
             </Grid>
             <Grid size={7}>
-              <Input placeholder="Choose Status" />
+              <Box>
+                <Typography variant="subtitle2" color="textDarker" marginBottom={3}>
+                  Choose Status{" "}
+                  <Typography component={"span"} color="red.600">
+                    *
+                  </Typography>
+                </Typography>
+                <TextField select sx={{ width: "100%" }} variant="outlined" placeholder="Choose the status">
+                  {INVOICE_STATUSES.map(option => (
+                    <MenuItem key={option.value} value={option.value}>
+                      {option.label}
+                    </MenuItem>
+                  ))}
+                </TextField>
+              </Box>
             </Grid>
           </Grid>
+          <Box display={"flex"} justifyContent={"end"}>
+            <Button sx={{ mt: 15 }} color="secondary" variant="contained" size="large" startIcon={<AddIcon />}>
+              Add Invoice
+            </Button>
+          </Box>
         </Box>
       </Paper>
       <Alert
