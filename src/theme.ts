@@ -28,6 +28,11 @@ export const theme = createTheme({
       primary: "#1C2434",
       darker: "#212B36",
     },
+    red: {
+      50: "#FBF0F1",
+      500: "#D34053",
+      600: "#F23030",
+    },
     blue: {
       50: "#F1F5F9",
       300: "#E2E8F0",
@@ -35,12 +40,20 @@ export const theme = createTheme({
       700: "#64748B",
     },
     gray: {
+      50: "#F7F9FC",
       200: "#F0F0F0",
       500: "#9D9D9D",
+      600: "#7E7E7E",
     },
     green: {
+      50: "#EDF7F1",
       300: "#34D399",
+      700: "#219653",
       900: "#004434",
+    },
+    orange: {
+      50: "#FFF8EB",
+      400: "#FFA70B",
     },
   },
   typography: {
@@ -123,11 +136,25 @@ export const theme = createTheme({
               borderColor: theme.palette.blue[500],
             },
           },
-          "& .MuiInputAdornment-root": {
+          "& .MuiInputAdornment-outlined": {
             backgroundColor: theme.palette.divider,
             padding: "24px 28px ",
             borderTopLeftRadius: theme.shape.borderRadius + "px",
             borderBottomLeftRadius: theme.shape.borderRadius + "px",
+          },
+        }),
+      },
+    },
+    MuiFilledInput: {
+      styleOverrides: {
+        root: ({ theme }) => ({
+          backgroundColor: "white",
+          borderRadius: 10,
+          "& .MuiFilledInput-input": {
+            padding: "10px 12px",
+          },
+          "&:hover": {
+            backgroundColor: theme.palette.gray[200],
           },
         }),
       },

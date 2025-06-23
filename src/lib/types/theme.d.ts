@@ -7,6 +7,9 @@ declare module "@mui/material/styles" {
   }
 
   interface Palette {
+    red: {
+      [key: string]: string;
+    };
     blue: {
       [key: string]: string;
     };
@@ -16,9 +19,15 @@ declare module "@mui/material/styles" {
     green: {
       [key: string]: string;
     };
+    orange: {
+      [key: string]: string;
+    };
   }
 
   interface PaletteOptions {
+    red?: {
+      [key: string]: string;
+    };
     blue?: {
       [key: string]: string;
     };
@@ -26,6 +35,9 @@ declare module "@mui/material/styles" {
       [key: string]: string;
     };
     green?: {
+      [key: string]: string;
+    };
+    orange?: {
       [key: string]: string;
     };
   }
