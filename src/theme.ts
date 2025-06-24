@@ -41,6 +41,7 @@ export const theme = createTheme({
     },
     gray: {
       50: "#F7F9FC",
+      100: "#F4F4F4",
       200: "#F0F0F0",
       500: "#9D9D9D",
       600: "#7E7E7E",

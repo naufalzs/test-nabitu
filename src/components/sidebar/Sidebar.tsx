@@ -1,12 +1,18 @@
+"use client";
+
 import { NAV_ITEMS } from "@/constants/navList";
 import MailIcon from "@mui/icons-material/Mail";
 import InboxIcon from "@mui/icons-material/MoveToInbox";
 import { Drawer, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Toolbar, Typography } from "@mui/material";
 import Image from "next/image";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
 
 const drawerWidth = 280;
 
 export default function Sidebar() {
+  const pathname = usePathname();
+
   return (
     <Drawer
       sx={{
@@ -17,10 +23,9 @@ export default function Sidebar() {
           boxSizing: "border-box",
           bgcolor: "text.primary",
           color: "gray.500",
-          // ACTIVE #F4F4F4
           "& .MuiListItemIcon-root": {
             minWidth: 34,
-            color: "gray.500",
+            color: "inherit",
           },
         },
       }}
@@ -40,21 +45,33 @@ export default function Sidebar() {
         Menu
       </Typography>
       <List sx={{ px: 6 }}>
-        {NAV_ITEMS.map((item, index) => (
-          <ListItem key={index} disablePadding>
-            <ListItemButton sx={{ py: 4 }}>
-              <ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon>
-              <ListItemText
-                primary={item.name}
-                slotProps={{
-                  primary: {
-                    variant: "subtitle1",
-                  },
+        {NAV_ITEMS.map((item, index) => {
+          const isActive = pathname === item.route;
+          return (
+            <ListItem key={index} disablePadding>
+              <ListItemButton
+                sx={{
+                  py: 4,
+                  borderRadius: "10px",
+                  color: isActive ? "gray.100" : "inherit",
                 }}
-              />
-            </ListItemButton>
-          </ListItem>
-        ))}
+                // disableRipple
+                href={item.route}
+                LinkComponent={Link}
+              >
+                <ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon>
+                <ListItemText
+                  primary={item.name}
+                  slotProps={{
+                    primary: {
+                      variant: "subtitle1",
+                    },
+                  }}
+                />
+              </ListItemButton>
+            </ListItem>
+          );
+        })}
       </List>
     </Drawer>
   );
