@@ -1,6 +1,6 @@
+import { DarkModeToggle } from "@/components";
 import { ExpandMoreOutlined, NotificationsOutlined, SmsOutlined } from "@mui/icons-material";
 import { AppBar, Avatar, Badge, Box, Fab, Toolbar, Typography } from "@mui/material";
-import { DarkModeToggle } from "../dark-mode-toggle";
 
 export default function Topbar() {
   return (

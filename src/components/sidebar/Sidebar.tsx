@@ -1,6 +1,6 @@
 "use client";
 
-import { NAV_ITEMS } from "@/constants/navList";
+import { NAV_ITEMS } from "@/constants/nav-list";
 import MailIcon from "@mui/icons-material/Mail";
 import InboxIcon from "@mui/icons-material/MoveToInbox";
 import { Drawer, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Toolbar, Typography } from "@mui/material";

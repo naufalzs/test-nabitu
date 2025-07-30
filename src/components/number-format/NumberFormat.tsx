@@ -1,3 +1,4 @@
+"use client";
 import React from "react";
 import { IMaskInput } from "react-imask";
 
@@ -15,6 +16,7 @@ const NumberFormat = React.forwardRef<HTMLInputElement, NumberFormatProps>((prop
       unmask={true}
       inputRef={ref}
       thousandsSeparator="."
+      // eslint-disable-next-line
       onAccept={(value: any) => {
         onChange({ target: { name: props.name, value } });
       }}

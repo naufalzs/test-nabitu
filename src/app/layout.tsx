@@ -2,8 +2,7 @@ import { Box, CssBaseline, InitColorSchemeScript, ThemeProvider } from "@mui/mat
 import { AppRouterCacheProvider } from "@mui/material-nextjs/v13-appRouter";
 import type { Metadata } from "next";
 
-import { Sidebar } from "@/components/sidebar";
-import { Topbar } from "@/components/topbar";
+import { Sidebar, Topbar } from "@/components";
 import { theme } from "@/theme";
 
 export const metadata: Metadata = {

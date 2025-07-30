@@ -7,7 +7,7 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 
-import { INVOICE_STATUSES } from "@/constants/invoiceStatus";
+import { INVOICE_STATUSES } from "@/constants/invoices/status";
 import SearchIcon from "@mui/icons-material/Search";
 import { Box, Chip, Container, MenuItem, TextField, Typography } from "@mui/material";
 
