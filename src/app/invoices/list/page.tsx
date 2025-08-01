@@ -1,3 +1,5 @@
+"use client";
+
 import MenuIcon from "@mui/icons-material/Menu";
 import Paper from "@mui/material/Paper";
 import Table from "@mui/material/Table";
@@ -8,6 +10,7 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 
 import { INVOICE_STATUSES } from "@/constants/invoices/status";
+import useInvoices from "@/hooks/use-invoices";
 import SearchIcon from "@mui/icons-material/Search";
 import { Box, Chip, Container, MenuItem, TextField, Typography } from "@mui/material";
 
@@ -43,6 +46,9 @@ const INVOICES_DUMMY = [
 ];
 
 export default function ListPage() {
+  const { invoices } = useInvoices();
+  console.log("invoices", invoices);
+
   return (
     <Container sx={{ pt: 13 }}>
       <Box display="flex" justifyContent="space-between">
@@ -121,7 +127,6 @@ export default function ListPage() {
               <TableBody sx={{ "& th, & td": { typography: "body1" } }}>
                 {INVOICES_DUMMY.map(invoice => {
                   const invoiceTheme = INVOICE_STATUSES.find(invStatus => invStatus.value === invoice.status);
-                  console.log("invoiceTheme", invoiceTheme);
                   return (
                     <TableRow
                       key={invoice.name}

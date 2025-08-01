@@ -1,6 +1,6 @@
 export const INVOICE_STATUS_VALUES = ["paid", "unpaid", "pending"] as const;
 
-type InvoiceStatusValue = (typeof INVOICE_STATUS_VALUES)[number];
+export type InvoiceStatusValue = (typeof INVOICE_STATUS_VALUES)[number];
 
 interface InvoiceStatusItem {
   label: string;

@@ -1,8 +1,9 @@
 import { InvoiceFormValues, invoiceSchema } from "@/lib/schemas/invoice-schema";
+import { Invoice } from "@/lib/types/invoice";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 
-export default function useInvoiceForms(onSubmit: (data: InvoiceFormValues) => void) {
+export default function useInvoiceForms(onSubmit: (data: Omit<Invoice, "id">) => void) {
   const {
     control,
     handleSubmit,

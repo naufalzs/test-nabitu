@@ -3,23 +3,29 @@
 import { NumberFormat } from "@/components";
 import { INVOICE_STATUSES } from "@/constants/invoices/status";
 import useInvoiceForms from "@/hooks/use-invoice-forms";
+import useInvoices from "@/hooks/use-invoices";
+import { Invoice } from "@/lib/types/invoice";
 import AddIcon from "@mui/icons-material/Add";
 import { Box, Button, FormControl, Grid, InputAdornment, InputLabel, MenuItem, Paper, TextField, Typography } from "@mui/material";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { enGB } from "date-fns/locale";
+import { nanoid } from "nanoid";
 import { Controller } from "react-hook-form";
 
 const InvoiceForm = () => {
+  const { addInvoice } = useInvoices();
   const { control, submitForm } = useInvoiceForms(data => {
     const { number: _number, amount: _amount } = data;
-    const formData = {
+    const newInvoice: Invoice = {
+      id: nanoid(10),
       ...data,
       number: `INV${_number}`,
       amount: `Rp ${_amount}`,
     };
-    console.log("formData", formData);
+    console.log("newInvoice", newInvoice);
+    // addInvoice(newInvoice);
   });
 
   return (

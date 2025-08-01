@@ -3,7 +3,12 @@ import z from "zod";
 
 export const invoiceSchema = z.object({
   name: z.string().min(1, "Invoice name is required"),
-  number: z.nullable(z.number("Invoice number must be a number").min(1, "Invoice number couldn't be negative number")),
+  number: z
+    .number("Invoice number is required")
+    .min(1)
+    .nullable()
+    .refine(val => val !== null, "Invoice number is required"),
+  // number: z.nullable(z.number("Invoice number must be a number").min(1, "Invoice number couldn't be negative number")),
   due_date: z
     .date()
     .nullable()
