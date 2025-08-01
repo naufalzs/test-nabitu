@@ -13,7 +13,7 @@ const NumberFormat = React.forwardRef<HTMLInputElement, NumberFormatProps>((prop
     <IMaskInput
       {...rest}
       mask={Number}
-      unmask={true}
+      unmask={false}
       inputRef={ref}
       thousandsSeparator="."
       // eslint-disable-next-line

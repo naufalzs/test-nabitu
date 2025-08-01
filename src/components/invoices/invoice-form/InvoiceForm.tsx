@@ -2,17 +2,25 @@
 
 import { NumberFormat } from "@/components";
 import { INVOICE_STATUSES } from "@/constants/invoices/status";
+import useInvoiceForms from "@/hooks/use-invoice-forms";
 import AddIcon from "@mui/icons-material/Add";
 import { Box, Button, FormControl, Grid, InputAdornment, InputLabel, MenuItem, Paper, TextField, Typography } from "@mui/material";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { enGB } from "date-fns/locale";
-import { Controller, useForm } from "react-hook-form";
+import { Controller } from "react-hook-form";
 
 const InvoiceForm = () => {
-  const { control, handleSubmit } = useForm();
-  const onSubmit = data => console.log(data);
+  const { control, submitForm } = useInvoiceForms(data => {
+    const { number: _number, amount: _amount } = data;
+    const formData = {
+      ...data,
+      number: `INV${_number}`,
+      amount: `Rp ${_amount}`,
+    };
+    console.log("formData", formData);
+  });
 
   return (
     <Paper
@@ -48,7 +56,6 @@ const InvoiceForm = () => {
               <Controller
                 name="name"
                 control={control}
-                defaultValue={""}
                 render={({ field: { onChange, value }, fieldState: { error }, formState }) => (
                   <TextField
                     helperText={error ? error.message : null}
@@ -59,6 +66,7 @@ const InvoiceForm = () => {
                     variant="outlined"
                     placeholder="Enter your invoice name"
                     type="text"
+                    autoComplete="off"
                   />
                 )}
               />
@@ -75,7 +83,6 @@ const InvoiceForm = () => {
               <Controller
                 name="number"
                 control={control}
-                defaultValue={""}
                 render={({ field: { onChange, value }, fieldState: { error }, formState }) => (
                   <TextField
                     helperText={error ? error.message : null}
@@ -101,12 +108,22 @@ const InvoiceForm = () => {
               </Typography>
               <LocalizationProvider dateAdapter={AdapterDateFns} adapterLocale={enGB}>
                 <Controller
-                  name="date"
+                  name="due_date"
                   control={control}
-                  defaultValue={null}
                   render={({ field: { onChange, value }, fieldState: { error }, formState }) => (
                     <>
-                      <DatePicker sx={{ width: "100%" }} value={value} onChange={onChange} />
+                      <DatePicker
+                        sx={{ width: "100%" }}
+                        value={value}
+                        onChange={onChange}
+                        slotProps={{
+                          textField: {
+                            variant: "outlined",
+                            error: !!error,
+                            helperText: error?.message,
+                          },
+                        }}
+                      />
                     </>
                   )}
                 />
@@ -124,7 +141,6 @@ const InvoiceForm = () => {
               <Controller
                 name="amount"
                 control={control}
-                defaultValue={""}
                 render={({ field: { onChange, value }, fieldState: { error }, formState }) => (
                   <TextField
                     helperText={error ? error.message : null}
@@ -139,9 +155,11 @@ const InvoiceForm = () => {
                             <Typography variant="body1">Rp</Typography>
                           </InputAdornment>
                         ),
+                        // eslint-disable-next-line
                         inputComponent: NumberFormat as any,
                       },
                     }}
+                    autoComplete="off"
                     variant="outlined"
                     placeholder="Enter your invoice amount"
                     type="text"
@@ -161,11 +179,10 @@ const InvoiceForm = () => {
               <Controller
                 name="status"
                 control={control}
-                defaultValue={""}
                 render={({ field: { onChange, value }, fieldState: { error }, formState }) => (
                   <FormControl sx={{ width: "100%" }} variant="outlined">
                     {!value && <InputLabel sx={{ top: -3 }}>Enter your invoice number</InputLabel>}
-                    <TextField id="status" select helperText={error ? error.message : null} error={!!error} onChange={onChange} value={value} variant="outlined" placeholder="Ent" type="number">
+                    <TextField select helperText={error ? error.message : null} error={!!error} onChange={onChange} value={value} variant="outlined" placeholder="Ent" type="number">
                       {INVOICE_STATUSES.map(option => (
                         <MenuItem key={option.value} value={option.value}>
                           {option.label}
@@ -179,7 +196,7 @@ const InvoiceForm = () => {
           </Grid>
         </Grid>
         <Box display={"flex"} justifyContent={"end"}>
-          <Button onClick={handleSubmit(onSubmit)} sx={{ mt: 15 }} color="secondary" variant="contained" size="large" startIcon={<AddIcon />}>
+          <Button onClick={submitForm} sx={{ mt: 15 }} color="secondary" variant="contained" size="large" startIcon={<AddIcon />}>
             Add Invoice
           </Button>
         </Box>
