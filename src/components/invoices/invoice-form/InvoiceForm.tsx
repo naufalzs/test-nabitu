@@ -186,7 +186,7 @@ const InvoiceForm = () => {
                 control={control}
                 render={({ field: { onChange, value }, fieldState: { error }, formState }) => (
                   <FormControl sx={{ width: "100%" }} variant="outlined">
-                    {!value && <InputLabel sx={{ top: -3 }}>Enter your invoice number</InputLabel>}
+                    {!value && <InputLabel sx={{ top: -3 }}>Choose the status</InputLabel>}
                     <TextField select helperText={error ? error.message : null} error={!!error} onChange={onChange} value={value} variant="outlined" placeholder="Ent" type="number">
                       {INVOICE_STATUSES.map(option => (
                         <MenuItem key={option.value} value={option.value}>

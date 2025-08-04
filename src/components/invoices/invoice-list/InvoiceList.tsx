@@ -12,11 +12,13 @@ import TableRow from "@mui/material/TableRow";
 import { INVOICE_STATUSES } from "@/constants/invoices/status";
 import useInvoices from "@/hooks/use-invoices";
 import SearchIcon from "@mui/icons-material/Search";
-import { Box, Chip, Container, MenuItem, TextField, Typography } from "@mui/material";
+import { Box, Chip, Container, FormControl, InputLabel, MenuItem, TextField, Typography } from "@mui/material";
 import { format } from "date-fns";
+import { Controller } from "react-hook-form";
 
 const InvoiceList = () => {
-  const { invoices } = useInvoices();
+  const { control, invoices } = useInvoices();
+
   return (
     <Container sx={{ pt: 13 }}>
       <Box display="flex" justifyContent="space-between">
@@ -24,36 +26,56 @@ const InvoiceList = () => {
           My Invoices
         </Typography>
         <Box display={"flex"} columnGap={6}>
-          <TextField
-            variant="filled"
-            placeholder="Search"
-            type="text"
-            slotProps={{
-              input: {
-                disableUnderline: true,
-                startAdornment: <SearchIcon sx={{ color: "gray.600" }} />,
-              },
-            }}
+          <Controller
+            name="nameLike"
+            control={control}
+            render={({ field: { onChange, value }, fieldState: { error }, formState }) => (
+              <TextField
+                onChange={onChange}
+                value={value}
+                variant="filled"
+                placeholder="Search"
+                type="text"
+                slotProps={{
+                  input: {
+                    disableUnderline: true,
+                    startAdornment: <SearchIcon sx={{ color: "gray.600" }} />,
+                  },
+                }}
+              />
+            )}
           />
-          <TextField
-            select
-            variant="filled"
-            type="text"
-            slotProps={{
-              input: {
-                disableUnderline: true,
-              },
-            }}
-            sx={{
-              width: 135,
-            }}
-          >
-            {INVOICE_STATUSES.map(option => (
-              <MenuItem key={option.value} value={option.value}>
-                {option.label}
-              </MenuItem>
-            ))}
-          </TextField>
+          <Controller
+            name="status"
+            control={control}
+            render={({ field: { onChange, value }, fieldState: { error }, formState }) => (
+              <FormControl variant="filled">
+                {!value && <InputLabel sx={{ top: -5 }}>All status</InputLabel>}
+                <TextField
+                  select
+                  onChange={onChange}
+                  value={value}
+                  type="text"
+                  variant="filled"
+                  slotProps={{
+                    input: {
+                      disableUnderline: true,
+                    },
+                  }}
+                  sx={{
+                    width: 135,
+                  }}
+                >
+                  <MenuItem value="">All Status</MenuItem>
+                  {INVOICE_STATUSES.map(option => (
+                    <MenuItem key={option.value} value={option.value}>
+                      {option.label}
+                    </MenuItem>
+                  ))}
+                </TextField>
+              </FormControl>
+            )}
+          />
         </Box>
       </Box>
       <Paper
