@@ -3,6 +3,7 @@
 import { NumberFormat } from "@/components";
 import { INVOICE_STATUSES } from "@/constants/invoices/status";
 import useInvoiceForms from "@/hooks/use-invoice-forms";
+import useInvoices from "@/hooks/use-invoices";
 import { Invoice } from "@/lib/types/invoice";
 import AddIcon from "@mui/icons-material/Add";
 import { Box, Button, FormControl, Grid, InputAdornment, InputLabel, MenuItem, Paper, TextField, Typography } from "@mui/material";
@@ -14,6 +15,7 @@ import { nanoid } from "nanoid";
 import { Controller } from "react-hook-form";
 
 const InvoiceForm = () => {
+  const { addInvoice } = useInvoices();
   const { control, submitForm } = useInvoiceForms(data => {
     const { number: _number, amount: _amount } = data;
     const newInvoice = {
@@ -22,7 +24,7 @@ const InvoiceForm = () => {
       number: `INV${_number}`,
       amount: `Rp ${_amount}`,
     } as Invoice;
-    console.log("formData", formData);
+    addInvoice(newInvoice);
   });
 
   return (
