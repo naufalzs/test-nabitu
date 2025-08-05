@@ -25,3 +25,13 @@ export async function createInvoice(invoice: Invoice) {
   setInvoices(newInvoices);
   return invoice;
 }
+
+export async function removeInvoice(invoiceId: Invoice["id"]) {
+  const data = getInvoices();
+  if (!invoiceId) throw new Error("no id provided");
+  if (!data) throw new Error("invoices data not found");
+
+  const newInvoices = data.filter(item => item.id !== invoiceId);
+  setInvoices(newInvoices);
+  return newInvoices;
+}

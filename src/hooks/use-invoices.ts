@@ -3,7 +3,7 @@
 import { useQueryParams } from "@/hooks";
 import { InvoiceFormValues } from "@/lib/schemas/invoice-schema";
 import { Invoice } from "@/lib/types/invoice";
-import { createInvoice, fetchInvoices } from "@/utils/api";
+import { createInvoice, fetchInvoices, removeInvoice } from "@/utils/api";
 import React, { useCallback } from "react";
 import { useForm, useWatch } from "react-hook-form";
 
@@ -52,7 +52,7 @@ export default function useInvoices() {
 
   React.useEffect(() => {
     filterInvoices();
-  }, [filterValues]);
+  }, [filterValues, invoices]);
 
   // Invoices Actions
   const addInvoice = useCallback(async (invoice: Invoice) => {
@@ -64,6 +64,13 @@ export default function useInvoices() {
     }
   }, []);
 
-  return { control, invoices: filteredInvoices, loading, error, addInvoice };
+  const deleteInvoice = useCallback(async (id: Invoice["id"]) => {
+    await removeInvoice(id);
+    setInvoices(prev => {
+      return prev.filter(item => item.id !== id);
+    });
+  }, []);
+
+  return { control, invoices: filteredInvoices, loading, error, addInvoice, deleteInvoice };
   // return { invoices, loading, error, addInvoice, removeInvoice, editInvoice}
 }

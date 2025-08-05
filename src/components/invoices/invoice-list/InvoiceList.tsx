@@ -1,5 +1,6 @@
 "use client";
-
+import DeleteIcon from "@mui/icons-material/Delete";
+import EditIcon from "@mui/icons-material/Edit";
 import MenuIcon from "@mui/icons-material/Menu";
 import Paper from "@mui/material/Paper";
 import Table from "@mui/material/Table";
@@ -12,12 +13,32 @@ import TableRow from "@mui/material/TableRow";
 import { INVOICE_STATUSES } from "@/constants/invoices/status";
 import useInvoices from "@/hooks/use-invoices";
 import SearchIcon from "@mui/icons-material/Search";
-import { Box, Chip, Container, FormControl, InputLabel, MenuItem, TextField, Typography } from "@mui/material";
+import { Box, Chip, Container, FormControl, InputLabel, ListItemIcon, Menu, MenuItem, TextField, Typography } from "@mui/material";
 import { format } from "date-fns";
+import React from "react";
 import { Controller } from "react-hook-form";
 
 const InvoiceList = () => {
-  const { control, invoices } = useInvoices();
+  const { control, invoices, deleteInvoice } = useInvoices();
+  const [anchorEl, setAnchorEl] = React.useState<HTMLElement | null>(null);
+  const open = Boolean(anchorEl);
+
+  const toggleMenu = (event: React.MouseEvent<HTMLElement>) => {
+    if (anchorEl) {
+      setAnchorEl(null);
+      return;
+    }
+
+    setAnchorEl(event.currentTarget);
+  };
+
+  const _deleteInvoice = async (event: React.MouseEvent<HTMLElement>) => {
+    const id = event.currentTarget.parentElement?.dataset.id;
+    if (!id) return;
+
+    setAnchorEl(null);
+    await deleteInvoice(id);
+  };
 
   return (
     <Container sx={{ pt: 13 }}>
@@ -155,7 +176,33 @@ const InvoiceList = () => {
                       </TableCell>
                       <TableCell>{invoice.amount}</TableCell>
                       <TableCell align="center">
-                        <MenuIcon />
+                        <Box sx={{ width: "fit-content", margin: "0 auto", cursor: "pointer" }} onClick={toggleMenu}>
+                          <MenuIcon />
+                        </Box>
+                        <Menu
+                          anchorEl={anchorEl}
+                          open={open}
+                          onClose={toggleMenu}
+                          slotProps={{
+                            list: {
+                              "data-id": invoice.id,
+                              // eslint-disable-next-line
+                            } as any,
+                          }}
+                        >
+                          <MenuItem onClick={_deleteInvoice}>
+                            <ListItemIcon>
+                              <DeleteIcon fontSize={"small"} />
+                            </ListItemIcon>
+                            <Typography variant="body3">Delete</Typography>
+                          </MenuItem>
+                          <MenuItem onClick={toggleMenu}>
+                            <ListItemIcon>
+                              <EditIcon fontSize={"small"} />
+                            </ListItemIcon>
+                            <Typography variant="body3">Edit</Typography>
+                          </MenuItem>
+                        </Menu>
                       </TableCell>
                     </TableRow>
                   );
