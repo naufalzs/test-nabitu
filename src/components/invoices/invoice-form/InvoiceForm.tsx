@@ -4,11 +4,13 @@ import { NumberFormat } from "@/components";
 import { INVOICE_STATUSES } from "@/constants/invoices/status";
 import { useInvoiceForms, useInvoices } from "@/hooks";
 import { Invoice } from "@/lib/types/invoice";
+import { formatToCurrency } from "@/utils";
 import AddIcon from "@mui/icons-material/Add";
 import { Box, Button, FormControl, Grid, InputAdornment, InputLabel, MenuItem, Paper, TextField, Typography } from "@mui/material";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import { addDays } from "date-fns";
 import { enGB } from "date-fns/locale";
 import { nanoid } from "nanoid";
 import { Controller } from "react-hook-form";
@@ -21,7 +23,7 @@ const InvoiceForm = () => {
       ...data,
       id: nanoid(10),
       number: `INV${_number}`,
-      amount: `Rp ${_amount}`,
+      amount: `Rp ${formatToCurrency(_amount)}`,
     } as Invoice;
     addInvoice(newInvoice);
   });
@@ -119,6 +121,7 @@ const InvoiceForm = () => {
                       <DatePicker
                         sx={{ width: "100%" }}
                         value={value}
+                        minDate={addDays(new Date(), 1)}
                         onChange={onChange}
                         slotProps={{
                           textField: {
