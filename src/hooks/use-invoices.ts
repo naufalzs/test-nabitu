@@ -9,16 +9,20 @@ import { useForm, useWatch } from "react-hook-form";
 
 export default function useInvoices() {
   const [invoices, setInvoices] = React.useState<Invoice[]>([]);
-  const [loading, setLoading] = React.useState<boolean>(false);
+  const [loading, setLoading] = React.useState<boolean>(true);
   const [error, setError] = React.useState<string | null>(null);
 
   const [filteredInvoices, setFilteredInvoices] = React.useState<Invoice[]>([]);
 
   // Load Invoices from Local Storage
   const init = async () => {
-    setLoading(true);
     try {
       const data = await fetchInvoices();
+      await new Promise<void>(resolve =>
+        setTimeout(() => {
+          resolve();
+        }, 500)
+      );
       setInvoices(data);
       setFilteredInvoices(data);
     } catch (err) {
@@ -56,11 +60,19 @@ export default function useInvoices() {
 
   // Invoices Actions
   const addInvoice = useCallback(async (invoice: Invoice) => {
+    setLoading(true);
     try {
       const created = await createInvoice(invoice);
-      setInvoices(prev => [...prev, created]);
+      await new Promise<void>(resolve =>
+        setTimeout(() => {
+          setInvoices(prev => [...prev, created]);
+          resolve();
+        }, 1000)
+      );
     } catch (err) {
       throw new Error(typeof err === "string" ? err : " Error add invoice");
+    } finally {
+      setLoading(false);
     }
   }, []);
 

@@ -122,6 +122,9 @@ export const theme = createTheme({
         root: ({ theme }) => ({
           "& .MuiInputBase-input": {
             padding: "13px 22px ",
+            "&.Mui-disabled": {
+              cursor: "not-allowed",
+            },
           },
           "& .MuiOutlinedInput-notchedOutline": {
             borderWidth: "1.5px",
@@ -132,7 +135,7 @@ export const theme = createTheme({
               borderColor: theme.palette.blue[500],
             },
           },
-          "&:hover": {
+          "&:not(.Mui-disabled):hover": {
             " .MuiOutlinedInput-notchedOutline": {
               borderColor: theme.palette.blue[500],
             },
@@ -156,6 +159,49 @@ export const theme = createTheme({
           },
           "&:hover": {
             backgroundColor: theme.palette.gray[200],
+          },
+        }),
+      },
+    },
+    MuiTable: {
+      styleOverrides: {
+        root: ({ theme }) => ({
+          "& .MuiTableHead-root": {
+            "& th, & td": {
+              fontWeight: theme.typography.subtitle1.fontWeight,
+              fontSize: theme.typography.subtitle1.fontSize,
+              letterSpacing: theme.typography.subtitle1.letterSpacing,
+            },
+            backgroundColor: theme.palette.gray[50],
+            "& th": {
+              padding: "15px 25px",
+              border: 0,
+              "&:first-child": {
+                paddingLeft: "30px",
+              },
+              "&:last-child": {
+                paddingRight: "30px",
+              },
+            },
+          },
+          "& .MuiTableBody-root": {
+            "& th, & td": {
+              fontWeight: theme.typography.body1.fontWeight,
+              fontSize: theme.typography.body1.fontSize,
+              letterSpacing: theme.typography.body1.letterSpacing,
+            },
+            "& .MuiTableRow-root": {
+              "& th, & td": {
+                padding: "15px 25px",
+                "&:first-child": {
+                  paddingLeft: "30px",
+                },
+                "&:last-child": {
+                  paddingRight: "30px",
+                },
+              },
+              "&:last-child td, &:last-child th": { border: 0 },
+            },
           },
         }),
       },

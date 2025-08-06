@@ -16,8 +16,8 @@ import { nanoid } from "nanoid";
 import { Controller } from "react-hook-form";
 
 const InvoiceForm = () => {
-  const { addInvoice } = useInvoices();
-  const { control, submitForm } = useInvoiceForms(data => {
+  const { loading, addInvoice } = useInvoices();
+  const { control, submitForm } = useInvoiceForms(async data => {
     const { number: _number, amount: _amount } = data;
     const newInvoice = {
       ...data,
@@ -25,7 +25,9 @@ const InvoiceForm = () => {
       number: `INV${_number}`,
       amount: `Rp ${formatToCurrency(_amount)}`,
     } as Invoice;
-    addInvoice(newInvoice);
+
+    await addInvoice(newInvoice);
+    window.location.href = "/invoices/list";
   });
 
   return (
@@ -64,6 +66,7 @@ const InvoiceForm = () => {
                 control={control}
                 render={({ field: { onChange, value }, fieldState: { error }, formState }) => (
                   <TextField
+                    disabled={loading}
                     helperText={error ? error.message : null}
                     error={!!error}
                     onChange={onChange}
@@ -91,6 +94,7 @@ const InvoiceForm = () => {
                 control={control}
                 render={({ field: { onChange, value }, fieldState: { error }, formState }) => (
                   <TextField
+                    disabled={loading}
                     helperText={error ? error.message : null}
                     error={!!error}
                     onChange={onChange}
@@ -123,6 +127,7 @@ const InvoiceForm = () => {
                         value={value}
                         minDate={addDays(new Date(), 1)}
                         onChange={onChange}
+                        disabled={loading}
                         slotProps={{
                           textField: {
                             variant: "outlined",
@@ -150,6 +155,7 @@ const InvoiceForm = () => {
                 control={control}
                 render={({ field: { onChange, value }, fieldState: { error }, formState }) => (
                   <TextField
+                    disabled={loading}
                     helperText={error ? error.message : null}
                     error={!!error}
                     onChange={onChange}
@@ -188,8 +194,8 @@ const InvoiceForm = () => {
                 control={control}
                 render={({ field: { onChange, value }, fieldState: { error }, formState }) => (
                   <FormControl sx={{ width: "100%" }} variant="outlined">
-                    {!value && <InputLabel sx={{ top: -3 }}>Choose the status</InputLabel>}
-                    <TextField select helperText={error ? error.message : null} error={!!error} onChange={onChange} value={value} variant="outlined" placeholder="Ent" type="number">
+                    {!value && <InputLabel sx={{ top: -3, color: "rgba(0, 0, 0, 0.18)" }}>Choose the status</InputLabel>}
+                    <TextField disabled={loading} select helperText={error ? error.message : null} error={!!error} onChange={onChange} value={value} variant="outlined" placeholder="Ent" type="number">
                       {INVOICE_STATUSES.map(option => (
                         <MenuItem key={option.value} value={option.value}>
                           {option.label}
@@ -203,7 +209,7 @@ const InvoiceForm = () => {
           </Grid>
         </Grid>
         <Box display={"flex"} justifyContent={"end"}>
-          <Button onClick={submitForm} sx={{ mt: 15 }} color="secondary" variant="contained" size="large" startIcon={<AddIcon />}>
+          <Button loading={loading} loadingPosition="start" onClick={submitForm} sx={{ mt: 15 }} color="secondary" variant="contained" size="large" startIcon={<AddIcon />}>
             Add Invoice
           </Button>
         </Box>

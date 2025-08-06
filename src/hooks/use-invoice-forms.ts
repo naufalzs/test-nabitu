@@ -19,9 +19,8 @@ export default function useInvoiceForms(onSubmit: (data: InvoiceFormValues) => v
     },
   });
 
-  const submitForm = handleSubmit(async (values: unknown) => {
-    await onSubmit(values as InvoiceFormValues);
-    reset();
+  const submitForm = handleSubmit((values: unknown) => {
+    onSubmit(values as InvoiceFormValues);
   });
 
   return {
