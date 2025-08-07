@@ -2,6 +2,7 @@
 
 import { NumberFormat } from "@/components";
 import { INVOICE_STATUSES } from "@/constants/invoices/status";
+import { useNotification } from "@/context/notification-provider";
 import { useInvoiceForms, useInvoices } from "@/hooks";
 import { Invoice } from "@/lib/types/invoice";
 import { formatToCurrency } from "@/utils";
@@ -16,6 +17,8 @@ import { nanoid } from "nanoid";
 import { Controller } from "react-hook-form";
 
 const InvoiceForm = () => {
+  const { pushNotification } = useNotification();
+
   const { loading, addInvoice } = useInvoices();
   const { control, submitForm } = useInvoiceForms(async data => {
     const { number: _number, amount: _amount } = data;
@@ -27,7 +30,14 @@ const InvoiceForm = () => {
     } as Invoice;
 
     await addInvoice(newInvoice);
-    window.location.href = "/invoices/list";
+    pushNotification({
+      type: "success",
+      title: "Invoice added successfully!",
+      message: "You can view and manage your invoice in the 'My Invoices' section.",
+    });
+    setTimeout(() => {
+      window.location.href = "/invoices/list";
+    }, 2000);
   });
 
   return (

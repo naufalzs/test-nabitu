@@ -3,6 +3,7 @@ import { AppRouterCacheProvider } from "@mui/material-nextjs/v13-appRouter";
 import type { Metadata } from "next";
 
 import { Sidebar, Topbar } from "@/components";
+import { NotificationProvider } from "@/context/notification-provider";
 import { theme } from "@/theme";
 
 export const metadata: Metadata = {
@@ -22,13 +23,15 @@ export default function RootLayout({
         <AppRouterCacheProvider>
           <ThemeProvider theme={theme}>
             <CssBaseline />
-            <Box sx={{ display: "flex" }}>
-              <Sidebar />
-              <Box component={"main"} sx={{ flexGrow: 1, bgcolor: "primary.main", minHeight: "100vh" }}>
-                <Topbar />
-                {children}
+            <NotificationProvider>
+              <Box sx={{ display: "flex", position: "relative" }}>
+                <Sidebar />
+                <Box component={"main"} sx={{ flexGrow: 1, bgcolor: "primary.main", minHeight: "100vh" }}>
+                  <Topbar />
+                  {children}
+                </Box>
               </Box>
-            </Box>
+            </NotificationProvider>
           </ThemeProvider>
         </AppRouterCacheProvider>
       </body>
