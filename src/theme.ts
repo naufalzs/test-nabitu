@@ -30,6 +30,7 @@ export const theme = createTheme({
     },
     red: {
       50: "#FBF0F1",
+      300: "#f07172",
       500: "#D34053",
       600: "#F23030",
     },

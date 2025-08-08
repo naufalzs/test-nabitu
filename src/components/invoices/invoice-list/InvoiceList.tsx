@@ -11,6 +11,7 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 
 import { INVOICE_STATUSES } from "@/constants/invoices/status";
+import { useNotification } from "@/context/notification-provider";
 import useInvoices from "@/hooks/use-invoices";
 import { Invoice } from "@/lib/types/invoice";
 import SearchIcon from "@mui/icons-material/Search";
@@ -21,6 +22,7 @@ import { Controller } from "react-hook-form";
 
 const InvoiceList = () => {
   const { loading, control, invoices, deleteInvoice } = useInvoices();
+  const { pushNotification } = useNotification();
 
   const [menuState, setMenuState] = React.useState<{
     anchorEl: HTMLElement | null;
@@ -41,6 +43,11 @@ const InvoiceList = () => {
     if (!id) return;
 
     await deleteInvoice(id);
+    pushNotification({
+      type: "error",
+      title: "Invoice Deleted",
+      message: "Invoice deleted from the table and you'll never see it again",
+    });
     handleCloseMenu();
   };
 

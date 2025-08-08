@@ -14,7 +14,7 @@ const AlertTheme = {
     icon: <InfoIcon />,
   },
   error: {
-    color: "red.500",
+    color: "red.300",
     icon: <CloseIcon />,
   },
 } as const;
