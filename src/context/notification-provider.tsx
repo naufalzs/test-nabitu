@@ -44,10 +44,13 @@ export const NotificationProvider = ({ children }: { children: ReactNode }) => {
     return id;
   }, []);
 
-  React.useEffect(() => () => {
-    timerRef.current.forEach(clearTimeout);
-    timerRef.current.clear();
-  });
+  React.useEffect(
+    () => () => {
+      timerRef.current.forEach(clearTimeout);
+      timerRef.current.clear();
+    },
+    []
+  );
 
   const value: NotificationAction = {
     pushNotification,
