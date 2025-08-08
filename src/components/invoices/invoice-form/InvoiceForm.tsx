@@ -3,9 +3,12 @@
 import { NumberFormat } from "@/components";
 import { INVOICE_STATUSES } from "@/constants/invoices/status";
 import { useNotification } from "@/context/notification-provider";
-import { useInvoiceForms, useInvoices } from "@/hooks";
+import { useInvoiceForms, useInvoices, useQueryParams } from "@/hooks";
+import { InvoiceFormInput } from "@/lib/schemas/invoice-schema";
 import { Invoice } from "@/lib/types/invoice";
 import { formatToCurrency } from "@/utils";
+import { getInvoice } from "@/utils/api";
+import { remapInvoiceEditData } from "@/utils/invoice";
 import AddIcon from "@mui/icons-material/Add";
 import { Box, Button, FormControl, Grid, InputAdornment, InputLabel, MenuItem, Paper, TextField, Typography } from "@mui/material";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
@@ -14,31 +17,77 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { addDays } from "date-fns";
 import { enGB } from "date-fns/locale";
 import { nanoid } from "nanoid";
+import React from "react";
 import { Controller } from "react-hook-form";
 
+interface EditState {
+  id: string | null;
+  data: InvoiceFormInput | null;
+}
+
 const InvoiceForm = () => {
+  const { getQueryParams } = useQueryParams();
   const { pushNotification } = useNotification();
 
-  const { loading, addInvoice } = useInvoices();
-  const { control, submitForm } = useInvoiceForms(async data => {
+  const [editState, setEditState] = React.useState<EditState>({
+    id: null,
+    data: null,
+  });
+  const isEdit = Boolean(editState.id);
+
+  const { loading, addInvoice, updateInvoice } = useInvoices();
+  const { control, submitForm, reset } = useInvoiceForms(async data => {
     const { number: _number, amount: _amount } = data;
     const newInvoice = {
       ...data,
-      id: nanoid(10),
+      id: isEdit ? editState.id : nanoid(10),
       number: `INV${_number}`,
       amount: `Rp ${formatToCurrency(_amount)}`,
     } as Invoice;
 
-    await addInvoice(newInvoice);
+    const isEqual = JSON.stringify({ ...editState.data, due_date: new Date(String(editState.data?.due_date)) }) === JSON.stringify(newInvoice);
+    if (isEqual) {
+      pushNotification({
+        type: "error",
+        title: "Nothing Edited",
+        message: "You should do any change before update invoice data",
+      });
+      return;
+    }
+
+    if (isEdit && editState.id) {
+      const { id, ...updatedInvoice } = newInvoice;
+      await updateInvoice(editState.id, updatedInvoice);
+    } else {
+      await addInvoice(newInvoice);
+    }
+
     pushNotification({
       type: "success",
-      title: "Invoice added successfully!",
+      title: `Invoice ${isEdit ? "edited" : "added"} successfully!`,
       message: "You can view and manage your invoice in the 'My Invoices' section.",
     });
     setTimeout(() => {
       window.location.href = "/invoices/list";
     }, 2000);
   });
+
+  const loadData = () => {
+    const id = getQueryParams("id");
+
+    if (!id) return;
+    setEditState(prev => ({ ...prev, id }));
+    const editData = getInvoice(id);
+
+    if (!editData) return;
+    const _editData = remapInvoiceEditData(editData);
+    setEditState(prev => ({ ...prev, data: editData }));
+    reset(_editData);
+  };
+
+  React.useEffect(() => {
+    loadData();
+  }, []);
 
   return (
     <Paper
@@ -220,7 +269,7 @@ const InvoiceForm = () => {
         </Grid>
         <Box display={"flex"} justifyContent={"end"}>
           <Button loading={loading} loadingPosition="start" onClick={submitForm} sx={{ mt: 15 }} color="secondary" variant="contained" size="large" startIcon={<AddIcon />}>
-            Add Invoice
+            {isEdit ? "Edit" : "Add"} Invoice
           </Button>
         </Box>
       </Box>

@@ -7,6 +7,10 @@ export default function useQueryParams() {
 
   const params = new URLSearchParams(searchParams.toString());
 
+  const getQueryParams = (name: string) => {
+    return params.get(name);
+  };
+
   const updateQueryParams = (newQueryParams: Record<string, string>) => {
     Object.entries(newQueryParams).forEach(([name, value]) => {
       if (value.length > 0) {
@@ -20,6 +24,7 @@ export default function useQueryParams() {
 
   return {
     queryParams: params,
+    getQueryParams,
     updateQueryParams,
   };
 }

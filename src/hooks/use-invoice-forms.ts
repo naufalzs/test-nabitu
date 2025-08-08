@@ -26,6 +26,7 @@ export default function useInvoiceForms(onSubmit: (data: InvoiceFormValues) => v
   return {
     control,
     submitForm,
+    reset,
     errors,
     isSubmitting,
   };

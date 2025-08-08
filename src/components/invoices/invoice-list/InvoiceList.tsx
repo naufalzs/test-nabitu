@@ -17,17 +17,21 @@ import { Invoice } from "@/lib/types/invoice";
 import SearchIcon from "@mui/icons-material/Search";
 import { Box, Chip, Container, FormControl, InputLabel, ListItemIcon, Menu, MenuItem, Skeleton, TextField, Typography } from "@mui/material";
 import { format } from "date-fns";
+import { useRouter } from "next/navigation";
 import React from "react";
 import { Controller } from "react-hook-form";
 
+interface MenuState {
+  anchorEl: HTMLElement | null;
+  id: string | null;
+}
+
 const InvoiceList = () => {
+  const router = useRouter();
   const { loading, control, invoices, deleteInvoice } = useInvoices();
   const { pushNotification } = useNotification();
 
-  const [menuState, setMenuState] = React.useState<{
-    anchorEl: HTMLElement | null;
-    id: string | null;
-  }>({ anchorEl: null, id: null });
+  const [menuState, setMenuState] = React.useState<MenuState>({ anchorEl: null, id: null });
   const open = Boolean(menuState.anchorEl);
 
   const handleOpenMenu = (event: React.MouseEvent<HTMLElement>, id: Invoice["id"]) => {
@@ -38,7 +42,7 @@ const InvoiceList = () => {
     setMenuState({ anchorEl: null, id: null });
   };
 
-  const _deleteInvoice = async (event: React.MouseEvent<HTMLElement>) => {
+  const _deleteInvoice = async () => {
     const id = menuState.id;
     if (!id) return;
 
@@ -49,6 +53,13 @@ const InvoiceList = () => {
       message: "Invoice deleted from the table and you'll never see it again",
     });
     handleCloseMenu();
+  };
+
+  const _editInvoice = async () => {
+    const id = menuState.id;
+    if (!id) return;
+
+    router.push(`/invoices/add?id=${id}`);
   };
 
   return (
@@ -201,17 +212,17 @@ const InvoiceList = () => {
       </Container>
 
       <Menu anchorEl={menuState.anchorEl} open={open} onClose={handleCloseMenu}>
+        <MenuItem onClick={_editInvoice}>
+          <ListItemIcon>
+            <EditIcon fontSize={"small"} />
+          </ListItemIcon>
+          <Typography variant="body3">Edit</Typography>
+        </MenuItem>
         <MenuItem onClick={_deleteInvoice}>
           <ListItemIcon>
             <DeleteIcon fontSize={"small"} />
           </ListItemIcon>
           <Typography variant="body3">Delete</Typography>
-        </MenuItem>
-        <MenuItem onClick={handleCloseMenu}>
-          <ListItemIcon>
-            <EditIcon fontSize={"small"} />
-          </ListItemIcon>
-          <Typography variant="body3">Edit</Typography>
         </MenuItem>
       </Menu>
     </>
