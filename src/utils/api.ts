@@ -22,7 +22,7 @@ export async function fetchInvoices() {
   return data;
 }
 
-export async function createInvoice(invoice: Invoice) {
+export async function createInvoice(invoice: Invoice): Promise<Invoice> {
   const data = getInvoices();
   if (!invoice) throw new Error("no invoice provided");
   if (!data) throw new Error("invoices data not found");
@@ -54,4 +54,12 @@ export async function editInvoice(invoiceId: Invoice["id"], invoice: Omit<Invoic
   newInvoices[editIdx] = { ...invoice, id: invoiceId };
 
   setInvoices(newInvoices);
+}
+
+export async function invoiceNumberExists(invoiceNumber: Invoice["number"]): Promise<boolean> {
+  const data = getInvoices();
+  if (!invoiceNumber) throw new Error("no id provided");
+  const itemIdx = data.findIndex(item => item.number === invoiceNumber);
+
+  return itemIdx > -1;
 }

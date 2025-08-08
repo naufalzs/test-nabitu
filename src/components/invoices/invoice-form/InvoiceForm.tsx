@@ -7,7 +7,7 @@ import { useInvoiceForms, useInvoices, useQueryParams } from "@/hooks";
 import { InvoiceFormInput } from "@/lib/schemas/invoice-schema";
 import { Invoice } from "@/lib/types/invoice";
 import { formatToCurrency } from "@/utils";
-import { getInvoice } from "@/utils/api";
+import { getInvoice, invoiceNumberExists } from "@/utils/api";
 import { remapInvoiceEditData } from "@/utils/invoice";
 import AddIcon from "@mui/icons-material/Add";
 import { Box, Button, FormControl, Grid, InputAdornment, InputLabel, MenuItem, Paper, TextField, Typography } from "@mui/material";
@@ -49,10 +49,22 @@ const InvoiceForm = () => {
     if (isEqual) {
       pushNotification({
         type: "error",
-        title: "Nothing Edited",
+        title: "Can't update invoice",
         message: "You should do any change before update invoice data",
       });
       return;
+    }
+
+    if (!isEdit) {
+      const invoiceExists = await invoiceNumberExists(newInvoice.number);
+      if (invoiceExists) {
+        pushNotification({
+          type: "error",
+          title: "Can't create invoice",
+          message: "Invoice number already exist, pick another number",
+        });
+        return;
+      }
     }
 
     if (isEdit && editState.id) {
