@@ -12,6 +12,7 @@ import TableRow from "@mui/material/TableRow";
 
 import { INVOICE_STATUSES } from "@/constants/invoices/status";
 import useInvoices from "@/hooks/use-invoices";
+import { Invoice } from "@/lib/types/invoice";
 import SearchIcon from "@mui/icons-material/Search";
 import { Box, Chip, Container, FormControl, InputLabel, ListItemIcon, Menu, MenuItem, Skeleton, TextField, Typography } from "@mui/material";
 import { format } from "date-fns";
@@ -20,197 +21,193 @@ import { Controller } from "react-hook-form";
 
 const InvoiceList = () => {
   const { loading, control, invoices, deleteInvoice } = useInvoices();
-  const [anchorEl, setAnchorEl] = React.useState<HTMLElement | null>(null);
-  const open = Boolean(anchorEl);
 
-  const toggleMenu = (event: React.MouseEvent<HTMLElement>) => {
-    if (anchorEl) {
-      setAnchorEl(null);
-      return;
-    }
+  const [menuState, setMenuState] = React.useState<{
+    anchorEl: HTMLElement | null;
+    id: string | null;
+  }>({ anchorEl: null, id: null });
+  const open = Boolean(menuState.anchorEl);
 
-    setAnchorEl(event.currentTarget);
+  const handleOpenMenu = (event: React.MouseEvent<HTMLElement>, id: Invoice["id"]) => {
+    setMenuState({ anchorEl: event.currentTarget, id });
+  };
+
+  const handleCloseMenu = () => {
+    setMenuState({ anchorEl: null, id: null });
   };
 
   const _deleteInvoice = async (event: React.MouseEvent<HTMLElement>) => {
-    const id = event.currentTarget.parentElement?.dataset.id;
+    const id = menuState.id;
     if (!id) return;
 
-    setAnchorEl(null);
     await deleteInvoice(id);
+    handleCloseMenu();
   };
 
   return (
-    <Container sx={{ pt: 13 }}>
-      <Box display="flex" justifyContent="space-between">
-        <Typography variant="h5" component={"h1"} fontWeight={"700"}>
-          My Invoices
-        </Typography>
-        <Box display={"flex"} columnGap={6}>
-          <Controller
-            name="nameLike"
-            control={control}
-            render={({ field: { onChange, value }, fieldState: { error }, formState }) => (
-              <TextField
-                onChange={onChange}
-                value={value}
-                variant="filled"
-                placeholder="Search"
-                type="text"
-                slotProps={{
-                  input: {
-                    disableUnderline: true,
-                    startAdornment: <SearchIcon sx={{ color: "gray.600" }} />,
-                  },
-                }}
-              />
-            )}
-          />
-          <Controller
-            name="status"
-            control={control}
-            render={({ field: { onChange, value }, fieldState: { error }, formState }) => (
-              <FormControl variant="filled">
-                {!value && <InputLabel sx={{ top: -5 }}>All status</InputLabel>}
+    <>
+      <Container sx={{ pt: 13 }}>
+        <Box display="flex" justifyContent="space-between">
+          <Typography variant="h5" component={"h1"} fontWeight={"700"}>
+            My Invoices
+          </Typography>
+          <Box display={"flex"} columnGap={6}>
+            <Controller
+              name="nameLike"
+              control={control}
+              render={({ field: { onChange, value }, fieldState: { error }, formState }) => (
                 <TextField
-                  select
                   onChange={onChange}
                   value={value}
-                  type="text"
                   variant="filled"
+                  placeholder="Search"
+                  type="text"
                   slotProps={{
                     input: {
                       disableUnderline: true,
+                      startAdornment: <SearchIcon sx={{ color: "gray.600" }} />,
                     },
                   }}
-                  sx={{
-                    width: 135,
-                  }}
-                >
-                  <MenuItem value="">All Status</MenuItem>
-                  {INVOICE_STATUSES.map(option => (
-                    <MenuItem key={option.value} value={option.value}>
-                      {option.label}
-                    </MenuItem>
-                  ))}
-                </TextField>
-              </FormControl>
-            )}
-          />
+                />
+              )}
+            />
+            <Controller
+              name="status"
+              control={control}
+              render={({ field: { onChange, value }, fieldState: { error }, formState }) => (
+                <FormControl variant="filled">
+                  {!value && <InputLabel sx={{ top: -5 }}>All status</InputLabel>}
+                  <TextField
+                    select
+                    onChange={onChange}
+                    value={value}
+                    type="text"
+                    variant="filled"
+                    slotProps={{
+                      input: {
+                        disableUnderline: true,
+                      },
+                    }}
+                    sx={{
+                      width: 135,
+                    }}
+                  >
+                    <MenuItem value="">All Status</MenuItem>
+                    {INVOICE_STATUSES.map(option => (
+                      <MenuItem key={option.value} value={option.value}>
+                        {option.label}
+                      </MenuItem>
+                    ))}
+                  </TextField>
+                </FormControl>
+              )}
+            />
+          </Box>
         </Box>
-      </Box>
-      <Paper
-        sx={{
-          my: 9,
-          borderWidth: 1,
-          borderStyle: "solid",
-          borderColor: "blue.300",
-          boxShadow: "0px 8px 13px -3px rgba(0, 0, 0, 0.07);",
-        }}
-      >
-        <Box px={7.5} pt={7.5} pb={10}>
-          <TableContainer>
-            <Table aria-label="invoices table">
-              <TableHead>
-                <TableRow>
-                  <TableCell>Invoice</TableCell>
-                  <TableCell>Due Date</TableCell>
-                  <TableCell>Status</TableCell>
-                  <TableCell>Amount</TableCell>
-                  <TableCell align="center">Actions</TableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {loading ? (
+        <Paper
+          sx={{
+            my: 9,
+            borderWidth: 1,
+            borderStyle: "solid",
+            borderColor: "blue.300",
+            boxShadow: "0px 8px 13px -3px rgba(0, 0, 0, 0.07);",
+          }}
+        >
+          <Box px={7.5} pt={7.5} pb={10}>
+            <TableContainer>
+              <Table aria-label="invoices table">
+                <TableHead>
                   <TableRow>
-                    <TableCell>
-                      <Skeleton variant="text" />
-                      <Skeleton variant="text" />
-                    </TableCell>
-                    <TableCell>
-                      <Skeleton variant="text" />
-                    </TableCell>
-                    <TableCell>
-                      <Skeleton variant="rectangular" sx={{ height: 32, borderRadius: 10 }} />
-                    </TableCell>
-                    <TableCell>
-                      <Skeleton variant="text" />
-                    </TableCell>
-                    <TableCell>
-                      <Skeleton variant="rectangular" sx={{ margin: "0 auto", height: 24, width: 24, borderRadius: 2 }} />
-                    </TableCell>
+                    <TableCell>Invoice</TableCell>
+                    <TableCell>Due Date</TableCell>
+                    <TableCell>Status</TableCell>
+                    <TableCell>Amount</TableCell>
+                    <TableCell align="center">Actions</TableCell>
                   </TableRow>
-                ) : invoices.length > 0 ? (
-                  invoices.map(invoice => {
-                    const invoiceTheme = INVOICE_STATUSES.find(invStatus => invStatus.value === invoice.status);
-                    return (
-                      <TableRow key={invoice.id}>
-                        <TableCell component="th" scope="row">
-                          <Box>
-                            <Box>{invoice.name}</Box>
-                            <Box
-                              sx={{
-                                typography: "subtitle2",
-                                color: "blue.700",
-                              }}
-                            >
-                              {invoice.number}
+                </TableHead>
+                <TableBody>
+                  {loading ? (
+                    <TableRow>
+                      <TableCell>
+                        <Skeleton variant="text" />
+                        <Skeleton variant="text" />
+                      </TableCell>
+                      <TableCell>
+                        <Skeleton variant="text" />
+                      </TableCell>
+                      <TableCell>
+                        <Skeleton variant="rectangular" sx={{ height: 32, borderRadius: 10 }} />
+                      </TableCell>
+                      <TableCell>
+                        <Skeleton variant="text" />
+                      </TableCell>
+                      <TableCell>
+                        <Skeleton variant="rectangular" sx={{ margin: "0 auto", height: 24, width: 24, borderRadius: 2 }} />
+                      </TableCell>
+                    </TableRow>
+                  ) : invoices.length > 0 ? (
+                    invoices.map(invoice => {
+                      const invoiceTheme = INVOICE_STATUSES.find(invStatus => invStatus.value === invoice.status);
+                      return (
+                        <TableRow key={invoice.id}>
+                          <TableCell component="th" scope="row">
+                            <Box>
+                              <Box>{invoice.name}</Box>
+                              <Box
+                                sx={{
+                                  typography: "subtitle2",
+                                  color: "blue.700",
+                                }}
+                              >
+                                {invoice.number}
+                              </Box>
                             </Box>
-                          </Box>
-                        </TableCell>
-                        <TableCell>{format(invoice.due_date, "MMM d,yyyy")}</TableCell>
-                        <TableCell>
-                          <Chip
-                            label={invoice.status.toLowerCase()}
-                            sx={{ bgcolor: invoiceTheme?.bgColor, color: invoiceTheme?.color, typography: "body2", fontWeight: 500, textTransform: "capitalize" }}
-                          />
-                        </TableCell>
-                        <TableCell>{invoice.amount}</TableCell>
-                        <TableCell align="center">
-                          <Box sx={{ width: "fit-content", margin: "0 auto", cursor: "pointer" }} onClick={toggleMenu}>
-                            <MenuIcon />
-                          </Box>
-                          <Menu
-                            anchorEl={anchorEl}
-                            open={open}
-                            onClose={toggleMenu}
-                            slotProps={{
-                              list: {
-                                "data-id": invoice.id,
-                                // eslint-disable-next-line
-                              } as any,
-                            }}
-                          >
-                            <MenuItem onClick={_deleteInvoice}>
-                              <ListItemIcon>
-                                <DeleteIcon fontSize={"small"} />
-                              </ListItemIcon>
-                              <Typography variant="body3">Delete</Typography>
-                            </MenuItem>
-                            <MenuItem onClick={toggleMenu}>
-                              <ListItemIcon>
-                                <EditIcon fontSize={"small"} />
-                              </ListItemIcon>
-                              <Typography variant="body3">Edit</Typography>
-                            </MenuItem>
-                          </Menu>
-                        </TableCell>
-                      </TableRow>
-                    );
-                  })
-                ) : (
-                  <TableRow>
-                    <TableCell colSpan={5} sx={{ textAlign: "center" }}>
-                      <Typography variant="h6">No Data Found</Typography>
-                    </TableCell>
-                  </TableRow>
-                )}
-              </TableBody>
-            </Table>
-          </TableContainer>
-        </Box>
-      </Paper>
-    </Container>
+                          </TableCell>
+                          <TableCell>{format(invoice.due_date, "MMM d,yyyy")}</TableCell>
+                          <TableCell>
+                            <Chip
+                              label={invoice.status.toLowerCase()}
+                              sx={{ bgcolor: invoiceTheme?.bgColor, color: invoiceTheme?.color, typography: "body2", fontWeight: 500, textTransform: "capitalize" }}
+                            />
+                          </TableCell>
+                          <TableCell>{invoice.amount}</TableCell>
+                          <TableCell align="center">
+                            <Box sx={{ width: "fit-content", margin: "0 auto", cursor: "pointer" }} onClick={e => handleOpenMenu(e, invoice.id)}>
+                              <MenuIcon />
+                            </Box>
+                          </TableCell>
+                        </TableRow>
+                      );
+                    })
+                  ) : (
+                    <TableRow>
+                      <TableCell colSpan={5} sx={{ textAlign: "center" }}>
+                        <Typography variant="h6">No Data Found</Typography>
+                      </TableCell>
+                    </TableRow>
+                  )}
+                </TableBody>
+              </Table>
+            </TableContainer>
+          </Box>
+        </Paper>
+      </Container>
+
+      <Menu anchorEl={menuState.anchorEl} open={open} onClose={handleCloseMenu}>
+        <MenuItem onClick={_deleteInvoice}>
+          <ListItemIcon>
+            <DeleteIcon fontSize={"small"} />
+          </ListItemIcon>
+          <Typography variant="body3">Delete</Typography>
+        </MenuItem>
+        <MenuItem onClick={handleCloseMenu}>
+          <ListItemIcon>
+            <EditIcon fontSize={"small"} />
+          </ListItemIcon>
+          <Typography variant="body3">Edit</Typography>
+        </MenuItem>
+      </Menu>
+    </>
   );
 };
 
