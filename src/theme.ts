@@ -1,6 +1,7 @@
 "use client";
 
 import { createTheme } from "@mui/material";
+import type {} from "@mui/x-date-pickers/themeAugmentation";
 import { Inter, Open_Sans } from "next/font/google";
 
 const openSans = Open_Sans({
@@ -146,6 +147,35 @@ export const theme = createTheme({
             padding: "24px 28px ",
             borderTopLeftRadius: theme.shape.borderRadius + "px",
             borderBottomLeftRadius: theme.shape.borderRadius + "px",
+          },
+        }),
+      },
+    },
+    MuiPickersTextField: {
+      styleOverrides: {
+        root: ({ theme }) => ({
+          "&.MuiPickersOutlinedInput-root": {
+            padding: "0 22px ",
+            "&.Mui-disabled": {
+              cursor: "not-allowed",
+            },
+          },
+          "& .MuiPickersInputBase-sectionsContainer": {
+            padding: "13px 0",
+          },
+          "& .MuiPickersOutlinedInput-notchedOutline": {
+            borderWidth: "1.5px",
+            borderColor: theme.palette.blue[300],
+          },
+          "&.Mui-focused": {
+            "& .MuiPickersOutlinedInput-notchedOutline": {
+              borderColor: theme.palette.blue[500] + " !important",
+            },
+          },
+          "&:not(.Mui-disabled):hover": {
+            " .MuiPickersOutlinedInput-notchedOutline": {
+              borderColor: theme.palette.blue[500],
+            },
           },
         }),
       },
