@@ -46,8 +46,9 @@ const InvoiceForm = () => {
       amount: `Rp ${formatToCurrency(_amount)}`,
     } as Invoice;
 
+    // Check whether form edited when update
     const isEqual = JSON.stringify({ ...editState.data, due_date: new Date(String(editState.data?.due_date)) }) === JSON.stringify(newInvoice);
-    if (isEqual) {
+    if (isEdit && isEqual) {
       pushNotification({
         type: "error",
         title: "Can't update invoice",
@@ -56,16 +57,15 @@ const InvoiceForm = () => {
       return;
     }
 
-    if (!isEdit) {
-      const invoiceExists = await invoiceNumberExists(newInvoice.number);
-      if (invoiceExists) {
-        pushNotification({
-          type: "error",
-          title: "Can't create invoice",
-          message: "Invoice number already exist, pick another number",
-        });
-        return;
-      }
+    // Check whether invoice number already existed or not
+    const invoiceExists = await invoiceNumberExists(newInvoice.number);
+    if (invoiceExists) {
+      pushNotification({
+        type: "error",
+        title: "Can't create invoice",
+        message: "Invoice number already exist, pick another number",
+      });
+      return;
     }
 
     if (isEdit && editState.id) {
