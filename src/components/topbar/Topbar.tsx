@@ -1,8 +1,22 @@
+"use client";
+
 import { DarkModeToggle } from "@/components";
 import { ExpandMoreOutlined, NotificationsOutlined, SmsOutlined } from "@mui/icons-material";
-import { AppBar, Avatar, Badge, Box, Fab, Toolbar, Typography } from "@mui/material";
+import { AppBar, Avatar, Badge, Box, Fab, Menu, MenuItem, Toolbar, Typography } from "@mui/material";
+import React from "react";
 
 export default function Topbar() {
+  const [avatarMenu, setAvatarMenu] = React.useState<HTMLElement | null>(null);
+  const openAvatarMenu = Boolean(avatarMenu);
+
+  const handleOpenAvatarMenu = (event: React.MouseEvent<HTMLElement>) => {
+    setAvatarMenu(event.currentTarget);
+  };
+
+  const handleCloseAvatarMenu = () => {
+    setAvatarMenu(null);
+  };
+
   return (
     <Box sx={{ borderBottom: "1px solid #E2E8F0" }}>
       <AppBar position="static" elevation={0}>
@@ -37,7 +51,7 @@ export default function Topbar() {
                   Verified Member
                 </Typography>
               </Box>
-              <Box display={"flex"} alignItems={"center"} gap={2.5} sx={{ cursor: "pointer" }}>
+              <Box onClick={handleOpenAvatarMenu} display={"flex"} alignItems={"center"} gap={2.5} sx={{ cursor: "pointer" }} pb={"5px"}>
                 <Avatar src="/images/avatar-img.png" sx={{ width: 46, height: 46 }} />
                 <ExpandMoreOutlined sx={{ color: "blue.500" }} />
               </Box>
@@ -45,6 +59,54 @@ export default function Topbar() {
           </Box>
         </Toolbar>
       </AppBar>
+      <Menu
+        anchorEl={avatarMenu}
+        open={openAvatarMenu}
+        onClose={handleCloseAvatarMenu}
+        transformOrigin={{
+          vertical: "top",
+          horizontal: "right",
+        }}
+        anchorOrigin={{
+          vertical: "bottom",
+          horizontal: "right",
+        }}
+        slotProps={{
+          paper: {
+            elevation: 0,
+            sx: {
+              overflow: "visible",
+              filter: "drop-shadow(0px 2px 8px rgba(0,0,0,0.32))",
+              mt: 1.5,
+              "& .MuiAvatar-root": {
+                width: 32,
+                height: 32,
+                ml: -0.5,
+                mr: 1,
+              },
+              "&::before": {
+                content: '""',
+                display: "block",
+                position: "absolute",
+                top: 0,
+                left: 34,
+                width: 10,
+                height: 10,
+                bgcolor: "background.paper",
+                transform: "translateY(-50%) rotate(45deg)",
+                zIndex: 0,
+              },
+            },
+          },
+        }}
+      >
+        <MenuItem onClick={handleCloseAvatarMenu}>
+          <Typography variant="body2">My Profile</Typography>
+        </MenuItem>
+        <MenuItem onClick={handleCloseAvatarMenu}>
+          <Typography variant="body2">Settings</Typography>
+        </MenuItem>
+      </Menu>
     </Box>
   );
 }

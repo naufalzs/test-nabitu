@@ -32,7 +32,7 @@ const InvoiceList = () => {
   const { pushNotification } = useNotification();
 
   const [menuState, setMenuState] = React.useState<MenuState>({ anchorEl: null, id: null });
-  const open = Boolean(menuState.anchorEl);
+  const openMenu = Boolean(menuState.anchorEl);
 
   const handleOpenMenu = (event: React.MouseEvent<HTMLElement>, id: Invoice["id"]) => {
     setMenuState({ anchorEl: event.currentTarget, id });
@@ -211,7 +211,7 @@ const InvoiceList = () => {
         </Paper>
       </Container>
 
-      <Menu anchorEl={menuState.anchorEl} open={open} onClose={handleCloseMenu}>
+      <Menu anchorEl={menuState.anchorEl} open={openMenu} onClose={handleCloseMenu}>
         <MenuItem onClick={_editInvoice}>
           <ListItemIcon>
             <EditIcon fontSize={"small"} />
