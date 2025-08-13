@@ -49,7 +49,7 @@ export default function useInvoices() {
 
   const filterInvoices = () => {
     const [nameLike, status] = filterValues;
-    const filteredData = invoices.filter(inv => (status.length < 1 || inv.status === status) && inv.name.includes(nameLike));
+    const filteredData = invoices.filter(inv => (status.length < 1 || inv.status === status) && inv.name.toLowerCase().includes(nameLike.toLowerCase()));
     setFilteredInvoices(filteredData);
     updateQueryParams({ nameLike, status });
   };
