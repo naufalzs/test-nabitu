@@ -9,8 +9,9 @@ import { Invoice } from "@/lib/types/invoice";
 import { formatToCurrency } from "@/utils";
 import { getInvoice, invoiceNumberExists } from "@/utils/api";
 import { remapInvoiceEditData } from "@/utils/invoice";
+import { KeyboardArrowDown } from "@mui/icons-material";
 import AddIcon from "@mui/icons-material/Add";
-import { Box, Button, FormControl, Grid, InputAdornment, InputLabel, MenuItem, Paper, TextField, Typography } from "@mui/material";
+import { Box, Button, FormControl, FormHelperText, Grid, InputAdornment, InputLabel, MenuItem, Paper, Select, TextField, Typography } from "@mui/material";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
@@ -265,14 +266,25 @@ const InvoiceForm = () => {
                 control={control}
                 render={({ field: { onChange, value }, fieldState: { error }, formState }) => (
                   <FormControl sx={{ width: "100%" }} variant="outlined">
-                    {!value && <InputLabel sx={{ top: -3, color: "rgba(0, 0, 0, 0.18)" }}>Choose the status</InputLabel>}
-                    <TextField disabled={loading} select helperText={error ? error.message : null} error={!!error} onChange={onChange} value={value} variant="outlined" placeholder="Ent" type="number">
+                    {!value && (
+                      <InputLabel
+                        shrink={false}
+                        sx={{
+                          top: -3,
+                          color: "rgba(0, 0, 0, 0.18)",
+                        }}
+                      >
+                        Choose the status
+                      </InputLabel>
+                    )}
+                    <Select disabled={loading} error={!!error} onChange={onChange} value={value} variant="outlined" type="number" IconComponent={KeyboardArrowDown}>
                       {INVOICE_STATUSES.map(option => (
                         <MenuItem key={option.value} value={option.value}>
                           {option.label}
                         </MenuItem>
                       ))}
-                    </TextField>
+                    </Select>
+                    <FormHelperText error={!!error}>{error ? error.message : null}</FormHelperText>
                   </FormControl>
                 )}
               />
